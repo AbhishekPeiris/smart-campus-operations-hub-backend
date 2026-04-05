@@ -1,0 +1,5 @@
+package com.smartcampus.operationshub.storage;
+
+public class FileStorageProperties {
+    
+}
