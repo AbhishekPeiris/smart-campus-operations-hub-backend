@@ -3,6 +3,7 @@ package com.smartcampus.operationshub.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -29,14 +30,13 @@ public class OpenApiConfig {
                         .license(new License()
                                 .name("Academic Project Use")))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
-                .schemaRequirement(
+                .components(new Components().addSecuritySchemes(
                         SECURITY_SCHEME_NAME,
                         new SecurityScheme()
                                 .name(SECURITY_SCHEME_NAME)
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT")
-                )
+                                .bearerFormat("JWT")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Project Documentation")
                         .url("https://example.com/docs"));

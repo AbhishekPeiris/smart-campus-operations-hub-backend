@@ -1,10 +1,9 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://AbhishekPeiris:abhi2001@cluster0.yiebxsw.mongodb.net/smart_campus_operations_hub
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/smart_campus_operations_hub}
 
 server:
-  port: 8080
+  port: 8081
 
 application:
   security:
