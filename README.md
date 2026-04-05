@@ -43,8 +43,11 @@ Current defaults from `application.yml`:
 
 ```yaml
 spring:
-  mongodb:
-    uri: ${MONGODB_URI:mongodb://localhost:27017/smart_campus_operations_hub}
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/smart_campus_operations_hub}
   devtools:
     restart:
       enabled: false
