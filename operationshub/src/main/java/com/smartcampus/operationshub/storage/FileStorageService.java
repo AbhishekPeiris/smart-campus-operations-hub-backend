@@ -1,5 +1,10 @@
 package com.smartcampus.operationshub.storage;
 
-public class FileStorageService {
-    
+import org.springframework.web.multipart.MultipartFile;
+
+public interface FileStorageService {
+
+    String storeFile(MultipartFile file);
+
+    void deleteFile(String fileName);
 }
