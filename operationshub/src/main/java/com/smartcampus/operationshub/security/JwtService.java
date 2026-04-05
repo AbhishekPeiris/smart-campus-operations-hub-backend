@@ -1,18 +1,21 @@
 package com.smartcampus.operationshub.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
@@ -68,7 +71,42 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = resolveSecretKeyBytes(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private byte[] resolveSecretKeyBytes(String secret) {
+        byte[] rawSecretBytes = secret.getBytes(StandardCharsets.UTF_8);
+        if (rawSecretBytes.length >= 32) {
+            return rawSecretBytes;
+        }
+
+        byte[] base64Decoded = tryDecodeBase64(secret);
+        if (base64Decoded != null && base64Decoded.length >= 32) {
+            return base64Decoded;
+        }
+
+        byte[] base64UrlDecoded = tryDecodeBase64Url(secret);
+        if (base64UrlDecoded != null && base64UrlDecoded.length >= 32) {
+            return base64UrlDecoded;
+        }
+
+        throw new IllegalStateException("JWT secret key must be at least 32 bytes for HS256");
+    }
+
+    private byte[] tryDecodeBase64(String secret) {
+        try {
+            return Decoders.BASE64.decode(secret);
+        } catch (RuntimeException ex) {
+            return null;
+        }
+    }
+
+    private byte[] tryDecodeBase64Url(String secret) {
+        try {
+            return Decoders.BASE64URL.decode(secret);
+        } catch (RuntimeException ex) {
+            return null;
+        }
     }
 }
