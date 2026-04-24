@@ -14,8 +14,8 @@ import com.smartcampus.operationshub.common.dto.ApiSuccessResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RestController 
-@RequestMapping("/api/v1/auth") 
+@RestController  // handle HTTP requests and return responses.
+@RequestMapping("/api/v1/auth")  // It defines the base path for all endpoints in the controller.
 @RequiredArgsConstructor 
 public class AuthenticationController {
 
